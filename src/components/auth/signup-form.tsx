@@ -22,14 +22,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { signupSchema } from "@/schemas/auth";
-import { useSignupMutation } from "@/redux/api/auth";
-import { IApiErrorRes } from "@/interfaces/ApiRes";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useSignupMutation } from "@/lib/redux/api/auth";
+import { IApiErrorRes } from "@/interfaces/ApiRes";
 
 export function SigninForm() {
-  const [signup, { isLoading }] = useSignupMutation();
   const router = useRouter();
+  const [signup, { isLoading, error }] = useSignupMutation();
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -43,29 +43,29 @@ export function SigninForm() {
 
   async function onSubmit(values: z.infer<typeof signupSchema>) {
     try {
-      const result = await signup(values);
-      form.reset();
-      if (result.error) {
-        const errorMessage =
-          "status" in result.error
-            ? (result.error.data as IApiErrorRes).message || "Unknown error"
-            : result.error.message || "Unknown error";
-        toast.error(`Signup failed - ${errorMessage}`, {
-          position: "top-center",
-          richColors: true,
-        });
-        return;
-      }
-      localStorage.setItem("userEmail", values.email);
-
-      toast.success(`Signup success - ${result.data.message}`, {
+      const result = await signup(values).unwrap();
+      toast.success(`Signup successfully - ${result.message}`, {
         position: "top-center",
         richColors: true,
       });
+
+      form.reset();
+      localStorage.setItem("userEmail", values.email);
       form.reset();
       router.push("/activate_account");
     } catch (error) {
-      console.log(error);
+      if (error && typeof error === "object" && "data" in error) {
+        const apiError = error.data as IApiErrorRes;
+        toast.error(`Signup failed - ${apiError.message}`, {
+          position: "top-center",
+          richColors: true,
+        });
+      } else {
+        toast.error("An unexpected error occurred!", {
+          position: "top-center",
+          richColors: true,
+        });
+      }
     }
   }
 
