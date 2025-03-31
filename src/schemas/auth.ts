@@ -76,3 +76,10 @@ export const verifyOtpSchema = userSchema
   });
 
 export const signinSchema = userSchema.pick({ email: true, password: true });
+
+export type IUser = z.infer<typeof userSchema>;
+export type ISignup = z.infer<typeof signupSchema>;
+export type IResetPassword = z.infer<typeof resetPasswordSchema>;
+export type ISendOtp = z.infer<typeof sendOtpSchema>;
+export type IVerifyOtp = z.infer<typeof verifyOtpSchema>;
+export type ISignin = z.infer<typeof signinSchema>;
