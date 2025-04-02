@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CustomError } from "./error";
 
 export const cookieSchema = z.object({
   name: z
@@ -16,12 +17,14 @@ export const cookieSchema = z.object({
     .max(4096, "Cookie value cannot exceed 4096 characters."),
 });
 
+export const deleteCookiesSchema = cookieSchema.pick({ name: true });
+
 export type ISetcookies = z.infer<typeof cookieSchema>;
 
-export const setCookies = async (data: ISetcookies) => {
+export const cookiesApi = async <T>(data: T, endpoint: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/auth/set_cookies`,
+      `${process.env.NEXT_PUBLIC_API_ROUTE_URL}/${endpoint}`,
       {
         method: "POST",
         headers: {
@@ -32,7 +35,7 @@ export const setCookies = async (data: ISetcookies) => {
     );
 
     if (!response.ok) {
-      throw new Error("set cookies failed");
+      throw new CustomError("Internal Server Error", 500);
     }
 
     return await response.json();

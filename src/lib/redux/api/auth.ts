@@ -23,6 +23,13 @@ const authApi = createApi({
       }),
     }),
 
+    signout: builder.mutation<{ message: string }, void>({
+      query: () => ({
+        url: "/auth/signout",
+        method: "POST",
+      }),
+    }),
+
     sendOTP: builder.mutation<{ message: string }, ISendOtp>({
       query: (data) => ({
         url: "/auth/send_OTP",
@@ -56,4 +63,5 @@ export const {
   useActivateUserMutation,
   useSigninMutation,
   useResetPasswordMutation,
+  useSignoutMutation,
 } = authApi;

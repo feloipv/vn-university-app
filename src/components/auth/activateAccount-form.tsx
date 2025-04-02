@@ -35,7 +35,7 @@ import {
   useSendOTPMutation,
 } from "@/lib/redux/api/auth";
 import { maskEmail } from "@/lib/format";
-import { setCookies } from "@/lib/setCookies";
+import { cookiesApi } from "@/lib/setCookies";
 
 const COUNTDOWN_DURATION = 30;
 
@@ -132,7 +132,7 @@ export function ActivateAccountForm() {
   const onSubmit = async (values: z.infer<typeof verifyOtpSchema>) => {
     try {
       const result = await activateUser(values).unwrap();
-      await setCookies({ name: "isSignin", value: "1" });
+      await cookiesApi({ name: "isSignin", value: "1" }, "/api/cookies/set");
 
       toast.success(result.message, {
         position: "top-center",
