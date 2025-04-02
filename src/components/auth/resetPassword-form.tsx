@@ -1,6 +1,6 @@
 "use client";
 
-import { verifyOtpSchema } from "@/schemas/auth";
+import { verifyOtpAndResetPassSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -17,7 +18,6 @@ import { Button } from "../ui/button";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import {
@@ -31,28 +31,30 @@ import { toast } from "sonner";
 import { IStoredCountdownData } from "@/interfaces/auth";
 import { IApiErrorRes } from "@/interfaces/ApiRes";
 import {
-  useActivateUserMutation,
+  useResetPasswordMutation,
   useSendOTPMutation,
 } from "@/lib/redux/api/auth";
 import { maskEmail } from "@/lib/format";
-import { setCookies } from "@/lib/setCookies";
+import { Input } from "../ui/input";
 
 const COUNTDOWN_DURATION = 30;
 
-export function ActivateAccountForm() {
+export function ResetPasswordForm() {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
   const [countdown, setCountdown] = useState(COUNTDOWN_DURATION);
   const [sendOTP, { isLoading }] = useSendOTPMutation();
-  const [activateUser, { isLoading: activateUserIsLoading }] =
-    useActivateUserMutation();
+  const [resetPassword, { isLoading: resetPasswordIsLoading }] =
+    useResetPasswordMutation();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const form = useForm<z.infer<typeof verifyOtpSchema>>({
-    resolver: zodResolver(verifyOtpSchema),
+  const form = useForm<z.infer<typeof verifyOtpAndResetPassSchema>>({
+    resolver: zodResolver(verifyOtpAndResetPassSchema),
     defaultValues: {
       email: "",
       otp: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -127,13 +129,13 @@ export function ActivateAccountForm() {
     return () => {
       clearTimer();
     };
-  }, [router, form, initializeCountdown, clearTimer]);
+  }, [form, initializeCountdown, clearTimer]);
 
-  const onSubmit = async (values: z.infer<typeof verifyOtpSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof verifyOtpAndResetPassSchema>
+  ) => {
     try {
-      const result = await activateUser(values).unwrap();
-      await setCookies({ name: "isSignin", value: "1" });
-
+      const result = await resetPassword(values).unwrap();
       toast.success(result.message, {
         position: "top-center",
         richColors: true,
@@ -142,11 +144,11 @@ export function ActivateAccountForm() {
       localStorage.removeItem("userEmail");
       localStorage.removeItem("otpCountdownData");
 
-      router.push("/");
+      router.push("/signin");
     } catch (error) {
       if (error && typeof error === "object" && "data" in error) {
         const apiError = error.data as IApiErrorRes;
-        toast.error(`Activate failed - ${apiError.message}`, {
+        toast.error(`Signup failed - ${apiError.message}`, {
           position: "top-center",
           richColors: true,
         });
@@ -202,15 +204,13 @@ export function ActivateAccountForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-max space-y-6 m-auto"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="otp"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>OTP</FormLabel>
                   <FormControl>
                     <InputOTP maxLength={6} {...field}>
                       <InputOTPGroup>
@@ -219,6 +219,42 @@ export function ActivateAccountForm() {
                         ))}
                       </InputOTPGroup>
                     </InputOTP>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="******"
+                      type="password"
+                      {...field}
+                      className="focus-visible:ring-0"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="******"
+                      type="password"
+                      {...field}
+                      className="focus-visible:ring-0"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -244,9 +280,9 @@ export function ActivateAccountForm() {
             <Button
               type="submit"
               className="w-full cursor-pointer"
-              disabled={activateUserIsLoading}
+              disabled={isLoading}
             >
-              {activateUserIsLoading ? "Processing..." : "Submit"}
+              {resetPasswordIsLoading ? "Processing..." : "Submit"}
             </Button>
           </form>
         </Form>

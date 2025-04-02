@@ -1,19 +1,23 @@
-import { ISendOtp, ISignup, IVerifyOtp } from "@/schemas/auth";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/`;
+import { IResetPassword, ISendOtp, ISignin, ISignup } from "@/schemas/auth";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import baseQueryRefreshToken from "../baseQueryRefreshToken";
 
 const authApi = createApi({
   reducerPath: "user",
   tagTypes: ["User"],
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    credentials: "include",
-  }),
+  baseQuery: baseQueryRefreshToken,
   endpoints: (builder) => ({
     signup: builder.mutation<{ message: string }, ISignup>({
       query: (data) => ({
-        url: "signup",
+        url: "/auth/signup",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    signin: builder.mutation<{ message: string }, ISignin>({
+      query: (data) => ({
+        url: "/auth/signin",
         method: "POST",
         body: data,
       }),
@@ -21,15 +25,23 @@ const authApi = createApi({
 
     sendOTP: builder.mutation<{ message: string }, ISendOtp>({
       query: (data) => ({
-        url: "send_OTP",
+        url: "/auth/send_OTP",
         method: "POST",
         body: data,
       }),
     }),
 
-    activateUser: builder.mutation<{ message: string }, IVerifyOtp>({
+    activateUser: builder.mutation<{ message: string }, ISendOtp>({
       query: (data) => ({
-        url: "activate_user",
+        url: "/auth/activate_user",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    resetPassword: builder.mutation<{ message: string }, IResetPassword>({
+      query: (data) => ({
+        url: "/auth/reset_password",
         method: "POST",
         body: data,
       }),
@@ -42,4 +54,6 @@ export const {
   useSignupMutation,
   useSendOTPMutation,
   useActivateUserMutation,
+  useSigninMutation,
+  useResetPasswordMutation,
 } = authApi;

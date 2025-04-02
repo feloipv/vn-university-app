@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const publicPaths = ["/signin", "/signup", "/activate_account"];
+const publicPaths = [
+  "/signin",
+  "/signup",
+  "/activate_account",
+  "/reset_password",
+];
 
 export function middleware(req: NextRequest) {
-  const accessToken = req.cookies.get("accessToken")?.value;
-  console.log(accessToken);
+  const isSignin = Number(req.cookies.get("isSignin")?.value);
+
   const isPublicPath = publicPaths.some((path) =>
     req.nextUrl.pathname.startsWith(path)
   );
 
-  if (accessToken && isPublicPath) {
+  if (isSignin && isPublicPath) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if (!accessToken && !isPublicPath) {
+  if (!isSignin && !isPublicPath) {
     return NextResponse.redirect(new URL("/signup", req.url));
   }
 

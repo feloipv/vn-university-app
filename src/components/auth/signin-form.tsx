@@ -21,42 +21,48 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signupSchema } from "@/schemas/auth";
+import { signinSchema, signupSchema } from "@/schemas/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useSignupMutation } from "@/lib/redux/api/auth";
+import { useSigninMutation } from "@/lib/redux/api/auth";
 import { IApiErrorRes } from "@/interfaces/ApiRes";
 import Link from "next/link";
+import { setCookies } from "@/lib/setCookies";
+import { ForgotPassword } from "./forgotPassword";
 
-export function SignupForm() {
+export function SigninForm() {
   const router = useRouter();
-  const [signup, { isLoading, data }] = useSignupMutation();
+  const [signin, { isLoading }] = useSigninMutation();
 
-  const form = useForm<z.infer<typeof signupSchema>>({
-    resolver: zodResolver(signupSchema),
+  const form = useForm<z.infer<typeof signinSchema>>({
+    resolver: zodResolver(signinSchema),
     defaultValues: {
-      userName: "loipv03",
-      email: "phanvanloi1522003@gmail.com",
-      password: "123456",
-      confirmPassword: "123456",
+      email: "",
+      password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof signupSchema>) {
+  async function onSubmit(values: z.infer<typeof signinSchema>) {
     try {
-      const result = await signup(values).unwrap();
-      toast.success(`Signup successfully - ${result.message}`, {
+      const result = await signin(values).unwrap();
+      await setCookies({ name: "isSignin", value: "1" });
+
+      toast.success(result.message, {
         position: "top-center",
         richColors: true,
       });
 
-      localStorage.setItem("userEmail", values.email);
       form.reset();
-      router.push("/activate_account");
+      router.push("/");
     } catch (error) {
       if (error && typeof error === "object" && "data" in error) {
         const apiError = error.data as IApiErrorRes;
-        toast.error(`Signup failed - ${apiError.message}`, {
+        if (apiError.message == "Account not activated.") {
+          localStorage.setItem("userEmail", values.email);
+          router.push("/activate_account");
+          return;
+        }
+        toast.error(apiError.message, {
           position: "top-center",
           richColors: true,
         });
@@ -73,31 +79,14 @@ export function SignupForm() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Signup</CardTitle>
+          <CardTitle className="text-2xl">Signin</CardTitle>
           <CardDescription>
-            Enter your information below to register an account
+            Enter your information below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="userName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Your username"
-                        {...field}
-                        className="focus-visible:ring-0"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="email"
@@ -130,43 +119,27 @@ export function SignupForm() {
                         className="focus-visible:ring-0"
                       />
                     </FormControl>
+                    <div className="w-full flex justify-end">
+                      <ForgotPassword className="text-xs w-max cursor-pointer text-[#737373] hover:underline hover:text-blue-500" />
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="******"
-                        type="password"
-                        {...field}
-                        className="focus-visible:ring-0"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <Button
                 disabled={isLoading}
                 type="submit"
                 className="w-full cursor-pointer"
               >
-                Signup
+                Signin
               </Button>
               <div className="text-center text-sm">
-                Already have an account?{" "}
+                Don't have an account?{" "}
                 <Link
-                  href={"/signin"}
+                  href={"/signup"}
                   className="text-blue-500 font-semibold hover:underline underline-offset-4"
                 >
-                  Signin
+                  Signup
                 </Link>
               </div>
             </form>

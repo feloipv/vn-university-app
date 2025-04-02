@@ -77,9 +77,17 @@ export const verifyOtpSchema = userSchema
 
 export const signinSchema = userSchema.pick({ email: true, password: true });
 
+export const verifyOtpAndResetPassSchema = resetPasswordSchema
+  .merge(verifyOtpSchema)
+  .refine((data) => data.password === data.confirmPassword, {
+    message:
+      "Passwords do not match. Please ensure both passwords are identical",
+    path: ["confirmPassword"],
+  });
+
 export type IUser = z.infer<typeof userSchema>;
 export type ISignup = z.infer<typeof signupSchema>;
-export type IResetPassword = z.infer<typeof resetPasswordSchema>;
+export type IResetPassword = z.infer<typeof verifyOtpAndResetPassSchema>;
 export type ISendOtp = z.infer<typeof sendOtpSchema>;
 export type IVerifyOtp = z.infer<typeof verifyOtpSchema>;
 export type ISignin = z.infer<typeof signinSchema>;
