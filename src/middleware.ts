@@ -20,7 +20,7 @@ export function middleware(req: NextRequest) {
   }
 
   if (!isSignin && !isPublicPath) {
-    return NextResponse.redirect(new URL("/signup", req.url));
+    return NextResponse.redirect(new URL("/signin", req.url));
   }
 
   return NextResponse.next();

@@ -118,7 +118,7 @@ export function ResetPasswordForm() {
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
     if (!storedEmail) {
-      router.push("/signup");
+      router.push("/signin");
       return;
     }
 
@@ -148,7 +148,7 @@ export function ResetPasswordForm() {
     } catch (error) {
       if (error && typeof error === "object" && "data" in error) {
         const apiError = error.data as IApiErrorRes;
-        toast.error(`Signup failed - ${apiError.message}`, {
+        toast.error(apiError.message, {
           position: "top-center",
           richColors: true,
         });

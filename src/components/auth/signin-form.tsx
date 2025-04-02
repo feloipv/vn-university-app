@@ -27,8 +27,8 @@ import { useRouter } from "next/navigation";
 import { useSigninMutation } from "@/lib/redux/api/auth";
 import { IApiErrorRes } from "@/interfaces/ApiRes";
 import Link from "next/link";
-import { setCookies } from "@/lib/setCookies";
 import { ForgotPassword } from "./forgotPassword";
+import { cookiesApi } from "@/lib/setCookies";
 
 export function SigninForm() {
   const router = useRouter();
@@ -37,15 +37,15 @@ export function SigninForm() {
   const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "phanvanloi1522003@gmail.com",
+      password: "123456",
     },
   });
 
   async function onSubmit(values: z.infer<typeof signinSchema>) {
     try {
       const result = await signin(values).unwrap();
-      await setCookies({ name: "isSignin", value: "1" });
+      await cookiesApi({ name: "isSignin", value: "1" }, "/api/cookies/set");
 
       toast.success(result.message, {
         position: "top-center",

@@ -4,6 +4,12 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
+import { cookiesApi } from "../setCookies";
+
+interface IRes {
+  status: number;
+  message: string;
+}
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 
@@ -26,10 +32,14 @@ const baseQueryRefreshToken: BaseQueryFn<
       extraOptions
     );
 
-    if (refreshResult.data) {
+    if (
+      (refreshResult.data as { status: number; message: string })?.status ===
+      200
+    ) {
       result = await baseQuery(args, api, extraOptions);
     } else {
       await baseQuery("/auth/signout", api, extraOptions);
+      await cookiesApi({ name: "isSignin" }, "/api/cookies/delete");
     }
   }
 
