@@ -99,6 +99,7 @@ const UserMenu = () => {
       </AlertDialog>
       <Backdrop show={isLoading}>
         <LoaderCircle className="animate-spin size-6" />
+        <span>Loading...</span>
       </Backdrop>
     </div>
   );
