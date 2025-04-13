@@ -97,7 +97,7 @@ const UserMenu = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Backdrop show={isLoading}>
+      <Backdrop show={isLoading} className="flex place-items-center gap-x-2">
         <LoaderCircle className="animate-spin size-6" />
         <span>Loading...</span>
       </Backdrop>
