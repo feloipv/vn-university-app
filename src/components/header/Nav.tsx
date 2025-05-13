@@ -25,10 +25,10 @@ const Nav = () => {
         </li>
         <li
           className={`size-max px-5 py-2 rounded-sm cursor-pointer hover:bg-slate-100 hover:text-orange-500 ${
-            pathname == "/univarsiry" && "bg-slate-100 text-orange-500"
+            pathname == "/university" && "bg-slate-100 text-orange-500"
           }`}
         >
-          <Link href="/univarsiry" className="flex place-items-center gap-x-2">
+          <Link href="/university" className="flex place-items-center gap-x-2">
             <School className="size-4 text-inherit" />
             Trường Đại Học
           </Link>

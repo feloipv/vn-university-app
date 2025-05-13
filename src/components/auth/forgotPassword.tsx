@@ -25,6 +25,7 @@ import { useSendOTPMutation } from "@/lib/redux/api/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { IApiErrorRes } from "@/interfaces/ApiRes";
+import { LoaderCircle } from "lucide-react";
 
 export const ForgotPassword = ({ className }: { className?: string }) => {
   const [sendOTP, { isLoading }] = useSendOTPMutation();
@@ -105,7 +106,11 @@ export const ForgotPassword = ({ className }: { className?: string }) => {
                 type="submit"
                 className="w-max cursor-pointer"
               >
-                Submit
+                {isLoading ? (
+                  <LoaderCircle className="animate-spin size-5" />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </DialogFooter>
           </form>

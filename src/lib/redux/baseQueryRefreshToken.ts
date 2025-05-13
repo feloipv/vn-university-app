@@ -27,7 +27,10 @@ const baseQueryRefreshToken: BaseQueryFn<
 
   if (result.error && result.error.status === 401) {
     const refreshResult = await baseQuery(
-      "/auth/refresh_token",
+      {
+        url: "/auth/refresh_token",
+        method: "POST",
+      },
       api,
       extraOptions
     );
@@ -38,7 +41,14 @@ const baseQueryRefreshToken: BaseQueryFn<
     ) {
       result = await baseQuery(args, api, extraOptions);
     } else {
-      await baseQuery("/auth/signout", api, extraOptions);
+      await baseQuery(
+        {
+          url: "/auth/signout",
+          method: "POST",
+        },
+        api,
+        extraOptions
+      );
       await cookiesApi({ name: "isSignin" }, "/api/cookies/delete");
     }
   }

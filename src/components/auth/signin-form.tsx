@@ -29,6 +29,7 @@ import { IApiErrorRes } from "@/interfaces/ApiRes";
 import Link from "next/link";
 import { ForgotPassword } from "./forgotPassword";
 import { cookiesApi } from "@/lib/setCookies";
+import { LoaderCircle } from "lucide-react";
 
 export function SigninForm() {
   const router = useRouter();
@@ -131,7 +132,11 @@ export function SigninForm() {
                 type="submit"
                 className="w-full cursor-pointer"
               >
-                Signin
+                {isLoading ? (
+                  <LoaderCircle className="animate-spin size-5" />
+                ) : (
+                  "Signin"
+                )}
               </Button>
               <div className="text-center text-sm">
                 Don't have an account?{" "}
