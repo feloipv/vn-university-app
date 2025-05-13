@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import { useSignupMutation } from "@/lib/redux/api/auth";
 import { IApiErrorRes } from "@/interfaces/ApiRes";
 import Link from "next/link";
+import { LoaderCircle } from "lucide-react";
 
 export function SignupForm() {
   const router = useRouter();
@@ -158,7 +159,11 @@ export function SignupForm() {
                 type="submit"
                 className="w-full cursor-pointer"
               >
-                Signup
+                {isLoading ? (
+                  <LoaderCircle className="animate-spin size-5" />
+                ) : (
+                  "Signup"
+                )}
               </Button>
               <div className="text-center text-sm">
                 Already have an account?{" "}
