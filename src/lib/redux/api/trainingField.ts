@@ -1,22 +1,20 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryRefreshToken from "../baseQueryRefreshToken";
 import { IApiRes } from "@/interfaces/ApiRes";
-import { UniversityType } from "@/schemas/university";
-import { IGetUniversityById } from "@/interfaces/university";
+import { ITrainingField } from "@/schemas/trainingField";
+import { IGetTrainingFieldById } from "@/interfaces/trainingField";
 
-const universityApi = createApi({
-  reducerPath: "university",
-  tagTypes: ["University"],
+const trainingFieldApi = createApi({
+  reducerPath: "trainingField",
+  tagTypes: ["TrainingField"],
   baseQuery: baseQueryRefreshToken,
   endpoints: (builder) => ({
-    getUniversities: builder.query<
-      IApiRes<UniversityType[]>,
+    getTrainingFields: builder.query<
+      IApiRes<ITrainingField[]>,
       {
         page?: number;
         limit?: number;
         search?: string;
-        city?: string;
-        type?: string;
       }
     >({
       query: (params) => {
@@ -28,18 +26,19 @@ const universityApi = createApi({
           }, {} as Record<string, string>);
 
         const queryString = new URLSearchParams(queryParams).toString();
-        return `/universities?${queryString}`;
+        return `/training_fields?${queryString}`;
       },
-      providesTags: ["University"],
+      providesTags: ["TrainingField"],
     }),
-
-    getUniversityById: builder.query<IApiRes<IGetUniversityById>, string>({
-      query: (id) => `/university/${id}`,
-      providesTags: ["University"],
-    }),
+    getTrainingFieldById: builder.query<IApiRes<IGetTrainingFieldById>, string>(
+      {
+        query: (id) => `/training_field/${id}`,
+        providesTags: ["TrainingField"],
+      }
+    ),
   }),
 });
 
-export default universityApi;
-export const { useGetUniversitiesQuery, useGetUniversityByIdQuery } =
-  universityApi;
+export default trainingFieldApi;
+export const { useGetTrainingFieldsQuery, useGetTrainingFieldByIdQuery } =
+  trainingFieldApi;

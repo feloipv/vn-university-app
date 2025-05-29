@@ -33,13 +33,13 @@ import { LoaderCircle } from "lucide-react";
 
 export function SigninForm() {
   const router = useRouter();
-  const [signin, { isLoading }] = useSigninMutation();
+  const [signin, { isLoading, isSuccess }] = useSigninMutation();
 
   const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
       email: "phanvanloi1522003@gmail.com",
-      password: "123456",
+      password: "",
     },
   });
 
@@ -48,13 +48,12 @@ export function SigninForm() {
       const result = await signin(values).unwrap();
       await cookiesApi({ name: "isSignin", value: "1" }, "/api/cookies/set");
 
+      form.reset();
+      router.push("/");
       toast.success(result.message, {
         position: "top-center",
         richColors: true,
       });
-
-      form.reset();
-      router.push("/");
     } catch (error) {
       if (error && typeof error === "object" && "data" in error) {
         const apiError = error.data as IApiErrorRes;
@@ -128,7 +127,7 @@ export function SigninForm() {
                 )}
               />
               <Button
-                disabled={isLoading}
+                disabled={isLoading || isSuccess}
                 type="submit"
                 className="w-full cursor-pointer"
               >

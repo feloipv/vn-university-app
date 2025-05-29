@@ -35,7 +35,7 @@ export const ForgotPassword = ({ className }: { className?: string }) => {
   const formSendMail = useForm<z.infer<typeof sendOtpSchema>>({
     resolver: zodResolver(sendOtpSchema),
     defaultValues: {
-      email: "phanvanloi1522003@gmail.com",
+      email: "",
     },
   });
 
