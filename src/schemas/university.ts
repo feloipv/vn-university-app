@@ -1,4 +1,5 @@
-import z from "zod";
+import { isObjectId } from "./validate";
+import { z } from "zod";
 
 export const universitySchema = z.object({
   _id: z.string().optional(),
@@ -6,13 +7,6 @@ export const universitySchema = z.object({
     required_error: "University name is required",
     invalid_type_error: "University name must be a string",
   }),
-  categoryIds: z
-    .array(
-      z.string().refine((val) => ({
-        message: `Invalid category ID: ${val}`,
-      }))
-    )
-    .optional(),
   code: z.string().optional(),
   location: z.string({
     required_error: "Location is required",
@@ -29,7 +23,6 @@ export const universitySchema = z.object({
     .min(1000)
     .max(new Date().getFullYear())
     .optional(),
-
   description: z.string().optional(),
   website: z.string().url("Website must be a valid URL").optional(),
   logo: z.string().url("Logo must be a valid URL").optional(),
@@ -38,20 +31,61 @@ export const universitySchema = z.object({
 
   admissionInfo: z
     .object({
-      admissionMethod: z.array(z.string()).optional(),
-      admissionLink: z
-        .string()
-        .url("Admission link must be a valid URL")
+      methods: z
+        .array(
+          z.object({
+            title: z.string(),
+            description: z.string().optional(),
+            conditions: z.array(z.string()).optional(),
+            documents: z.array(z.string()).optional(),
+          })
+        )
         .optional(),
     })
     .optional(),
 
-  trainingFields: z.array(z.string()).optional(),
+  trainingFields: z
+    .array(
+      z.object({
+        trainingFieldId: isObjectId("Training field ID"),
+        majors: z.array(
+          z.object({
+            majorId: isObjectId("Major ID"),
+            scores: z
+              .array(
+                z.object({
+                  year: z.number({
+                    required_error: "Year is required",
+                  }),
+                  thpt: z.number().optional(),
+                  hocBa: z.number().optional(),
+                })
+              )
+              .optional(),
+          })
+        ),
+      })
+    )
+    .optional(),
+
+  campuses: z
+    .array(
+      z.object({
+        name: z.string().optional(),
+        address: z.string().optional(),
+        phone: z.string().optional(),
+        email: z.string().optional(),
+      })
+    )
+    .optional(),
 
   tuition: z
     .object({
       min: z.number({
         required_error: "Minimum tuition is required",
+      }),
+      max: z.number({
+        required_error: "Maximum tuition is required",
       }),
       unit: z.string().default("VND/year"),
     })

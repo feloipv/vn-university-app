@@ -25,7 +25,7 @@ import { cookiesApi } from "@/lib/setCookies";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoaderCircle, LogOut, User } from "lucide-react";
-import Backdrop from "@/lib/Backdrop";
+import Backdrop from "@/components/ui/Backdrop";
 
 const UserMenu = () => {
   const [signOut, { isLoading }] = useSignoutMutation();

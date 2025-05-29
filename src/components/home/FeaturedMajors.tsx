@@ -13,7 +13,7 @@ const FeaturedMajors = () => {
           định hình tương lai.
         </p>
         <ul className="w-[60%] h-[150px] m-auto grid grid-cols-4 gap-x-2.5">
-          <li className="hover:border hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:bg-gray-100 hover:text-orange-500">
+          <li className="border border-transparent hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:text-orange-500">
             <Link
               href="/"
               className="size-full grid grid-rows-[1fr_max-content] place-items-center gap-y-1"
@@ -31,7 +31,7 @@ const FeaturedMajors = () => {
               </span>
             </Link>
           </li>
-          <li className="hover:border hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:bg-gray-100 hover:text-orange-500">
+          <li className="border border-transparent hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:text-orange-500">
             <Link
               href="/"
               className="size-full grid grid-rows-[1fr_max-content] place-items-center gap-y-1"
@@ -49,7 +49,7 @@ const FeaturedMajors = () => {
               </span>
             </Link>
           </li>
-          <li className="hover:border hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:bg-gray-100 hover:text-orange-500">
+          <li className="border border-transparent hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:text-orange-500">
             <Link
               href="/"
               className="size-full grid grid-rows-[1fr_max-content] place-items-center gap-y-1"
@@ -65,7 +65,7 @@ const FeaturedMajors = () => {
               <span className="text-[16px] font-medium">Thiết kế đồ họa</span>
             </Link>
           </li>
-          <li className="hover:border hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:bg-gray-100 hover:text-orange-500">
+          <li className="border border-transparent hover:border-gray-200 transform hover:-translate-y-2 hover:shadow-lg transition-all duration-200 size-full p-3 rounded-xl cursor-pointer hover:text-orange-500">
             <Link
               href="/"
               className="size-full grid grid-rows-[1fr_max-content] place-items-center gap-y-1"
