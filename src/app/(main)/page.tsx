@@ -1,13 +1,11 @@
-import Banner from "@/components/Banner";
-import FeaturedMajors from "@/components/home/FeaturedMajors";
-import ListUniversityHome from "@/components/home/ListUniversityHome";
+import Banner from "@/components/home/Banner";
+import FeaturedUniversity from "@/components/home/FeaturedUniversity";
 
 export default function Home() {
   return (
     <>
       <Banner />
-      <FeaturedMajors />
-      <ListUniversityHome />
+      <FeaturedUniversity />
     </>
   );
 }

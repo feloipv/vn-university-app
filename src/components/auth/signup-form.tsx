@@ -31,7 +31,7 @@ import { LoaderCircle } from "lucide-react";
 
 export function SignupForm() {
   const router = useRouter();
-  const [signup, { isLoading, data }] = useSignupMutation();
+  const [signup, { isLoading, isSuccess }] = useSignupMutation();
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -155,18 +155,18 @@ export function SignupForm() {
               />
 
               <Button
-                disabled={isLoading}
+                disabled={isLoading || isSuccess}
                 type="submit"
                 className="w-full cursor-pointer"
               >
-                {isLoading ? (
+                {isLoading || isSuccess ? (
                   <LoaderCircle className="animate-spin size-5" />
                 ) : (
                   "Signup"
                 )}
               </Button>
               <div className="text-center text-sm">
-                Already have an account?{" "}
+                {`Already have an account? `}
                 <Link
                   href={"/signin"}
                   className="text-blue-500 font-semibold hover:underline underline-offset-4"

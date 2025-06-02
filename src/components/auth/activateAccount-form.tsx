@@ -36,6 +36,7 @@ import {
 } from "@/lib/redux/api/auth";
 import { maskEmail } from "@/lib/format";
 import { cookiesApi } from "@/lib/setCookies";
+import { LoaderCircle } from "lucide-react";
 
 const COUNTDOWN_DURATION = 30;
 
@@ -134,15 +135,14 @@ export function ActivateAccountForm() {
       const result = await activateUser(values).unwrap();
       await cookiesApi({ name: "isSignin", value: "1" }, "/api/cookies/set");
 
-      toast.success(result.message, {
-        position: "top-center",
-        richColors: true,
-      });
-
       localStorage.removeItem("userEmail");
       localStorage.removeItem("otpCountdownData");
 
       router.push("/");
+      toast.success(result.message, {
+        position: "top-center",
+        richColors: true,
+      });
     } catch (error) {
       if (error && typeof error === "object" && "data" in error) {
         const apiError = error.data as IApiErrorRes;
@@ -234,7 +234,7 @@ export function ActivateAccountForm() {
                 className={`text-sm font-medium ${
                   countdown > 0 || isLoading
                     ? "text-gray-400 cursor-not-allowed"
-                    : "text-primary hover:underline cursor-pointer"
+                    : "text-blue-500 cursor-pointer hover:underline"
                 }`}
                 onClick={handleResendOtp}
               >
@@ -246,7 +246,11 @@ export function ActivateAccountForm() {
               className="w-full cursor-pointer"
               disabled={activateUserIsLoading}
             >
-              {activateUserIsLoading ? "Processing..." : "Submit"}
+              {activateUserIsLoading ? (
+                <LoaderCircle className="animate-spin size-5" />
+              ) : (
+                "Activate"
+              )}
             </Button>
           </form>
         </Form>

@@ -5,55 +5,42 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ListUniversities } from "@/components/university/ListUniversities";
 import { useGetMajorByIdQuery } from "@/lib/redux/api/major";
 import { useParams } from "next/navigation";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { AppBreadcrumb } from "@/components/ui/breadcrumb";
 
 const MajorDetail = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data: major } = useGetMajorByIdQuery(id);
+  const { id, majorId } = useParams<{ id: string; majorId: string }>();
+  const { data: major } = useGetMajorByIdQuery(majorId);
+
+  const traningField = major?.data?.trainingFieldIds?.find(
+    (tnf) => String(tnf._id) === String(id)
+  );
 
   return (
     <>
       {major?.data ? (
-        <Breadcrumb className="my-5 font-medium">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/trainingField">Ngành học</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="text-[#333] font-medium">
-                {major.data.name}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <AppBreadcrumb
+          items={[
+            { label: "Trang chủ", href: "/" },
+            { label: String(traningField?.name), href: `/trainingField/${id}` },
+            { label: major.data.name, isCurrentPage: true },
+          ]}
+        />
       ) : (
         <Skeleton className="w-[25rem] h-5 my-5" />
       )}
       <div className="w-full">
         <h2 className="capitalize text-center text-2xl font-semibold">
-          Lựa chọn phù hợp với bạn
+          Lựa chọn chuyên ngành phù hợp với bạn
         </h2>
         <p className="mt-2 mb-5 text-center text-xs text-[#6b6b6b] font-medium">
-          Khám phá thông tin chi tiết về ngành học để định hướng nghề nghiệp
+          Khám phá thông tin chi tiết về chuyên ngành để định hướng nghề nghiệp
           chính xác.
         </p>
         {major ? (
           <section className="w-full border border-slate-200 rounded-lg p-10 space-y-5">
             <div>
               <h3 className="w-full text-xl font-semibold capitalize mb-2">
-                Ngành {major?.data?.name}
+                Chuyên ngành {major?.data?.name}
               </h3>
               <p className="text-sm text-[#6b6b6b] font-medium">
                 {major?.data?.description}
@@ -62,7 +49,7 @@ const MajorDetail = () => {
             <Separator />
             <ul className="list-disc list-inside text-[#6b7280] text-sm font-normal capitalize">
               <h4 className="capitalize text-black text-lg font-medium mt-4 mb-4">
-                {`Các Trường có đào tạo Ngành ${major.data?.name}`}
+                {`Các Trường có đào tạo chuyên Ngành ${major.data?.name}`}
               </h4>
               {major.data?.trainingFieldIds?.map((trainingfield) => (
                 <ListUniversities

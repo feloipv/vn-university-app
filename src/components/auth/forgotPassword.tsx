@@ -27,8 +27,14 @@ import { useRouter } from "next/navigation";
 import { IApiErrorRes } from "@/interfaces/ApiRes";
 import { LoaderCircle } from "lucide-react";
 
-export const ForgotPassword = ({ className }: { className?: string }) => {
-  const [sendOTP, { isLoading }] = useSendOTPMutation();
+export const ForgotPassword = ({
+  className,
+  disabled,
+}: {
+  className?: string;
+  disabled?: boolean;
+}) => {
+  const [sendOTP, { isLoading, isSuccess }] = useSendOTPMutation();
 
   const router = useRouter();
 
@@ -66,7 +72,9 @@ export const ForgotPassword = ({ className }: { className?: string }) => {
   };
   return (
     <Dialog>
-      <DialogTrigger className={className}>Forgot Password</DialogTrigger>
+      <DialogTrigger disabled={disabled} className={className}>
+        Forgot Password
+      </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Forgot password</DialogTitle>
@@ -104,7 +112,9 @@ export const ForgotPassword = ({ className }: { className?: string }) => {
               <Button
                 disabled={isLoading}
                 type="submit"
-                className="w-max cursor-pointer"
+                className={`w-full ${
+                  isLoading ? "cursor-not-allowed" : "cursor-pointer"
+                }`}
               >
                 {isLoading ? (
                   <LoaderCircle className="animate-spin size-5" />
