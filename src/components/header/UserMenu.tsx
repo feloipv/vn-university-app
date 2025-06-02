@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoaderCircle, LogOut, User } from "lucide-react";
 import Backdrop from "@/components/ui/Backdrop";
+import Link from "next/link";
 
 const UserMenu = () => {
   const [signOut, { isLoading }] = useSignoutMutation();
@@ -61,17 +62,22 @@ const UserMenu = () => {
             </Avatar>
           </MenubarTrigger>
           <MenubarContent>
-            <MenubarItem className="cursor-pointer hover:!text-blue-500 hover:!font-semibold">
-              <User className="size-4 text-inherit" />
-              Profile
+            <MenubarItem>
+              <Link
+                href={"/profile"}
+                className="cursor-pointer hover:!text-orange-500 flex gap-x-2"
+              >
+                <User className="size-4 text-inherit" />
+                <span>Profile</span>
+              </Link>
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem
-              className="my-2 cursor-pointer hover:!text-red-500 hover:!font-semibold"
+              className="cursor-pointer hover:!text-red-500 flex gap-x-2"
               onClick={() => setOpenDialogSignout(true)}
             >
               <LogOut className="size-4 text-inherit" />
-              Đăng xuất
+              <span>Đăng xuất</span>
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>

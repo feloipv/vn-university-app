@@ -120,7 +120,14 @@ export function SigninForm() {
                       />
                     </FormControl>
                     <div className="w-full flex justify-end">
-                      <ForgotPassword className="text-xs w-max cursor-pointer text-[#737373] hover:underline hover:text-blue-500" />
+                      <ForgotPassword
+                        disabled={isLoading || isSuccess}
+                        className={`text-xs w-max text-[#737373] ${
+                          isLoading || isSuccess
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer hover:underline hover:text-blue-500"
+                        }`}
+                      />
                     </div>
                     <FormMessage />
                   </FormItem>
@@ -131,7 +138,7 @@ export function SigninForm() {
                 type="submit"
                 className="w-full cursor-pointer"
               >
-                {isLoading ? (
+                {isLoading || isSuccess ? (
                   <LoaderCircle className="animate-spin size-5" />
                 ) : (
                   "Signin"

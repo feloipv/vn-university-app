@@ -36,6 +36,7 @@ import {
 } from "@/lib/redux/api/auth";
 import { maskEmail } from "@/lib/format";
 import { Input } from "../ui/input";
+import { LoaderCircle } from "lucide-react";
 
 const COUNTDOWN_DURATION = 30;
 
@@ -193,7 +194,7 @@ export function ResetPasswordForm() {
     <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-4xl font-bold capitalize">
-          Activate Account
+          Reset Password
         </CardTitle>
         <CardDescription>
           Please enter the OTP sent to{" "}
@@ -260,7 +261,7 @@ export function ResetPasswordForm() {
                 </FormItem>
               )}
             />
-            <div className="space-y-1">
+            <div className="grid grid-cols-[repeat(2,_max-content)] gap-2">
               <p className="text-sm text-muted-foreground">
                 Didn't receive OTP?
               </p>
@@ -278,11 +279,17 @@ export function ResetPasswordForm() {
               </button>
             </div>
             <Button
+              disabled={resetPasswordIsLoading}
               type="submit"
-              className="w-full cursor-pointer"
-              disabled={isLoading}
+              className={`w-full ${
+                resetPasswordIsLoading ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
             >
-              {resetPasswordIsLoading ? "Processing..." : "Submit"}
+              {resetPasswordIsLoading ? (
+                <LoaderCircle className="animate-spin size-5" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </form>
         </Form>

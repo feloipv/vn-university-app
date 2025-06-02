@@ -5,14 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetTrainingFieldByIdQuery } from "@/lib/redux/api/trainingField";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { AppBreadcrumb } from "@/components/ui/breadcrumb";
 
 const TrainingFieldDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,23 +14,13 @@ const TrainingFieldDetail = () => {
   return (
     <>
       {trainingField?.data ? (
-        <Breadcrumb className="my-5 font-medium">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/trainingField">Nhóm ngành</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="text-[#333] font-medium">
-                {trainingField.data?.name}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <AppBreadcrumb
+          items={[
+            { label: "Trang chủ", href: "/" },
+            { label: "Nhóm ngành", href: "/trainingField" },
+            { label: trainingField.data.name, isCurrentPage: true },
+          ]}
+        />
       ) : (
         <Skeleton className="w-[25rem] h-5 my-5" />
       )}
@@ -69,7 +52,9 @@ const TrainingFieldDetail = () => {
                   key={major._id}
                   className="pl-4 hover:text-orange-500 hover:underline"
                 >
-                  <Link href={`/trainingField/major/${major._id}`}>
+                  <Link
+                    href={`/trainingField/${trainingField.data?._id}/major/${major._id}`}
+                  >
                     {major.name}
                   </Link>
                 </li>
