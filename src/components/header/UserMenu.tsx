@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useCallback } from "react";
-import { useSignoutMutation } from "@/lib/redux/api/auth";
+import { useGetProfileQuery, useSignoutMutation } from "@/lib/redux/api/auth";
 import { cookiesApi } from "@/lib/setCookies";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -29,6 +29,7 @@ import Backdrop from "@/components/ui/Backdrop";
 import Link from "next/link";
 
 const UserMenu = () => {
+  const { data: userProfile } = useGetProfileQuery();
   const [signOut, { isLoading }] = useSignoutMutation();
   const router = useRouter();
   const [openDialogSignout, setOpenDialogSignout] = useState(false);
@@ -57,8 +58,16 @@ const UserMenu = () => {
         <MenubarMenu>
           <MenubarTrigger className="cursor-pointer p-0">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={String(userProfile?.data?.avatar)} />
+
+              <AvatarFallback
+                className={`${
+                  userProfile?.data?.userName &&
+                  "bg-green-700 text-white font-semibold"
+                }`}
+              >
+                {userProfile?.data?.userName.charAt(0).toUpperCase() || "UN"}
+              </AvatarFallback>
             </Avatar>
           </MenubarTrigger>
           <MenubarContent>

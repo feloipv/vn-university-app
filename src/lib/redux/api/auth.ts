@@ -1,12 +1,19 @@
 import { IResetPassword, ISendOtp, ISignin, ISignup } from "@/schemas/auth";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryRefreshToken from "../baseQueryRefreshToken";
+import { IApiRes } from "@/interfaces/ApiRes";
+import { IGetProfile } from "@/interfaces/auth";
 
 const authApi = createApi({
   reducerPath: "user",
   tagTypes: ["User"],
   baseQuery: baseQueryRefreshToken,
   endpoints: (builder) => ({
+    getProfile: builder.query<IApiRes<IGetProfile>, void>({
+      query: () => "/user/profile",
+      providesTags: ["User"],
+    }),
+
     signup: builder.mutation<{ message: string }, ISignup>({
       query: (data) => ({
         url: "/auth/signup",
@@ -32,7 +39,7 @@ const authApi = createApi({
 
     sendOTP: builder.mutation<{ message: string }, ISendOtp>({
       query: (data) => ({
-        url: "/auth/send_OTP",
+        url: "/auth/send-OTP",
         method: "POST",
         body: data,
       }),
@@ -40,7 +47,7 @@ const authApi = createApi({
 
     activateUser: builder.mutation<{ message: string }, ISendOtp>({
       query: (data) => ({
-        url: "/auth/activate_user",
+        url: "/auth/activate-user",
         method: "POST",
         body: data,
       }),
@@ -48,7 +55,7 @@ const authApi = createApi({
 
     resetPassword: builder.mutation<{ message: string }, IResetPassword>({
       query: (data) => ({
-        url: "/auth/reset_password",
+        url: "/auth/reset-password",
         method: "POST",
         body: data,
       }),
@@ -64,4 +71,5 @@ export const {
   useSigninMutation,
   useResetPasswordMutation,
   useSignoutMutation,
+  useGetProfileQuery,
 } = authApi;
