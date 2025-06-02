@@ -26,13 +26,13 @@ const trainingFieldApi = createApi({
           }, {} as Record<string, string>);
 
         const queryString = new URLSearchParams(queryParams).toString();
-        return `/training_fields?${queryString}`;
+        return `/training-fields?${queryString}`;
       },
       providesTags: ["TrainingField"],
     }),
     getTrainingFieldById: builder.query<IApiRes<IGetTrainingFieldById>, string>(
       {
-        query: (id) => `/training_field/${id}`,
+        query: (id) => `/training-field/${id}`,
         providesTags: ["TrainingField"],
       }
     ),
