@@ -1,5 +1,3 @@
-// components/Footer.tsx
-
 import Link from "next/link";
 import { Separator } from "./ui/separator";
 
@@ -36,11 +34,6 @@ const Footer = () => {
               <li>
                 <Link href="/trainingField" className="hover:text-orange-500">
                   Ngành Học
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-orange-500">
-                  Bài Viết
                 </Link>
               </li>
               <li>

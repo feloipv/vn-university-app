@@ -1,12 +1,5 @@
 import Link from "next/link";
-import {
-  BookMarked,
-  BookOpenCheck,
-  DraftingCompass,
-  House,
-  Newspaper,
-  School,
-} from "lucide-react";
+import { BookMarked, DraftingCompass, House, School } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const Nav = () => {
@@ -52,19 +45,6 @@ const Nav = () => {
           >
             <BookMarked className="size-4 text-inherit" />
             Ngành học
-          </Link>
-        </li>
-        <li
-          className={`size-max rounded-sm cursor-pointer hover:bg-slate-100 hover:text-orange-500 ${
-            pathname == "/blog" && "bg-slate-100 text-orange-500"
-          }`}
-        >
-          <Link
-            href="/blog"
-            className="size-full px-5 py-2 flex place-items-center gap-x-2"
-          >
-            <Newspaper className="size-4 text-inherit" />
-            Bài viết
           </Link>
         </li>
         <li
