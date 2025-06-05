@@ -14,6 +14,15 @@ const authApi = createApi({
       providesTags: ["User"],
     }),
 
+    uploadAvatar: builder.mutation<IApiRes, FormData>({
+      query: (formData) => ({
+        url: "/user/upload-avatar",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     signup: builder.mutation<{ message: string }, ISignup>({
       query: (data) => ({
         url: "/auth/signup",
@@ -72,4 +81,5 @@ export const {
   useResetPasswordMutation,
   useSignoutMutation,
   useGetProfileQuery,
+  useUploadAvatarMutation,
 } = authApi;

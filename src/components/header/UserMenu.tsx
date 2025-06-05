@@ -58,7 +58,9 @@ const UserMenu = () => {
         <MenubarMenu>
           <MenubarTrigger className="cursor-pointer p-0">
             <Avatar>
-              <AvatarImage src={String(userProfile?.data?.avatar)} />
+              {userProfile?.data?.avatar && (
+                <AvatarImage src={userProfile.data.avatar} />
+              )}
 
               <AvatarFallback
                 className={`${

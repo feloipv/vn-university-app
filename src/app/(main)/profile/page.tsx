@@ -1,11 +1,13 @@
-"use client";
-
-import { useGetProfileQuery } from "@/lib/redux/api/auth";
+import FavoriteUniversities from "@/components/user/FavoriteUniversities";
+import UserProfile from "@/components/user/UserProfile";
 
 const Profile = () => {
-  const { data: userProfile } = useGetProfileQuery();
-
-  return <div>Profile</div>;
+  return (
+    <section className="space-y-10">
+      <UserProfile />
+      <FavoriteUniversities />
+    </section>
+  );
 };
 
 export default Profile;
